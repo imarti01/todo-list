@@ -25,8 +25,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = (user) => {
-    dispatch({ type: types.LOGIN, payload: user });
+  const login = async (user) => {
+    const res = await axios.post("http://localhost:4000/users/login", user);
+
+    if (res.data.ok) {
+      dispatch({
+        type: types.LOGIN,
+        payload: { user: res.data.user, todos: res.data.todos },
+      });
+    }
+  };
+
+  const authFirebase = async (user) => {
+    const res = await axios.post(
+      "http://localhost:4000/users/authFirebase",
+      user
+    );
+
+    if (res.data.ok) {
+      dispatch({
+        type: types.LOGIN,
+        payload: { user: res.data.user, todos: res.data.todos },
+      });
+    }
   };
 
   const addTodo = () => {};
@@ -37,7 +58,15 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ authState, register, login, addTodo, editTodo, deleteTodo }}
+      value={{
+        authState,
+        register,
+        login,
+        authFirebase,
+        addTodo,
+        editTodo,
+        deleteTodo,
+      }}
     >
       {children}
     </AuthContext.Provider>

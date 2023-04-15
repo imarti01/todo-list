@@ -13,6 +13,7 @@ export const FormLogin = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
+    login(formLogin);
   };
 
   return (

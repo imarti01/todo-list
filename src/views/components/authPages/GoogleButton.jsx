@@ -1,14 +1,19 @@
 import { IoLogoGoogle } from "react-icons/io";
 import { getAuth, signInWithPopup } from "firebase/auth";
 import { googleProvider } from "../../../firebase/firebase";
+import { useAuthContext } from "../../../hooks/useAuthContext";
 
 export const GoogleButton = () => {
+  const { authFirebase } = useAuthContext();
+
   const auth = getAuth();
 
   const loginWithPopup = async () => {
     const response = await signInWithPopup(auth, googleProvider);
-    window.location.href = "/main";
-    console.log(response);
+    authFirebase({
+      username: response.user.displayName,
+      email: response.user.email,
+    });
   };
 
   return (
