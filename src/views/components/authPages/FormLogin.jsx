@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { InputElement } from "./InputElement";
 import { ButtonForm } from "./ButtonForm";
+import { useAuthContext } from "../../../hooks";
 
 export const FormLogin = () => {
+  const { login } = useAuthContext();
   const [formLogin, setFormLogin] = useState({ email: "", password: "" });
 
   const handleFormLogin = (e) => {
@@ -14,7 +16,7 @@ export const FormLogin = () => {
   };
 
   return (
-    <form className="w-11/12 h-44 flex flex-col items-center justify-around">
+    <form className="w-11/12 h-42 flex flex-col items-center justify-around">
       <InputElement
         label="Email:"
         type="email"

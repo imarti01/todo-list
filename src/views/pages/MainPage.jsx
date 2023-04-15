@@ -1,3 +1,13 @@
+import { auth } from "../../firebase/firebase";
+import { Header } from "../components/mainPage/Header";
+import { TodoListContainer } from "../components/mainPage/TodoListContainer";
+
 export const MainPage = () => {
-  return <div>MainPage</div>;
+  console.log(auth.currentUser);
+  return (
+    <div>
+      <Header />
+      <TodoListContainer />
+    </div>
+  );
 };

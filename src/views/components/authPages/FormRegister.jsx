@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { InputElement } from "./InputElement";
 import { ButtonForm } from "./ButtonForm";
+import { useAuthContext } from "../../../hooks";
 
 export const FormRegister = () => {
+  const { register } = useAuthContext();
+
   const [formRegister, setFormRegister] = useState({
     username: "",
     email: "",
@@ -10,17 +13,19 @@ export const FormRegister = () => {
   });
 
   const handleFormRegister = (e) => {
-    setFormRegister({ ...FormRegister, [e.target.name]: e.target.value });
+    setFormRegister({ ...formRegister, [e.target.name]: e.target.value });
   };
 
   const submitForm = (e) => {
     e.preventDefault();
+    register(formRegister);
   };
+
   return (
     <form className="w-11/12 h-44 flex flex-col items-center justify-around">
       <InputElement
         label="Username:"
-        type="username"
+        type="text"
         name="username"
         value={formRegister.username}
         onChange={handleFormRegister}
