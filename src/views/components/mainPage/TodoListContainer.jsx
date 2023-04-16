@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { TodoItem } from "./TodoItem";
-import { RiSendPlaneFill } from "react-icons/ri";
 import { ModalAddTodo } from "./ModalAddTodo";
 import { useAuthContext } from "../../../hooks";
 
@@ -19,7 +18,7 @@ export const TodoListContainer = () => {
       <h2 className="text-2xl py-1">TO-DO LIST</h2>
       <ul>
         {todos.map((todo) => (
-          <TodoItem key={todo.id} todo={todo} />
+          <TodoItem key={todo._id} todo={todo} />
         ))}
       </ul>
       <button

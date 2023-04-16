@@ -19,7 +19,7 @@ export const AuthProvider = ({ children }) => {
     );
     if (res.data.ok) {
       dispatch({
-        type: types.REGISTER,
+        type: types.AUTH,
         payload: { user: res.data.user, todos: res.data.todos },
       });
     }
@@ -30,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
     if (res.data.ok) {
       dispatch({
-        type: types.LOGIN,
+        type: types.AUTH,
         payload: { user: res.data.user, todos: res.data.todos },
       });
     }
@@ -44,13 +44,24 @@ export const AuthProvider = ({ children }) => {
 
     if (res.data.ok) {
       dispatch({
-        type: types.LOGIN,
+        type: types.AUTH,
         payload: { user: res.data.user, todos: res.data.todos },
       });
     }
   };
 
-  const addTodo = () => {};
+  const addTodo = async (newTodo) => {
+    const res = await axios.post("http://localhost:4000/todos/add", {
+      todo: newTodo,
+      userId: authState.user.userId,
+    });
+    if (res.data.ok) {
+      dispatch({
+        type: types.ADD_TODO,
+        payload: res.data.todo,
+      });
+    }
+  };
 
   const editTodo = () => {};
 

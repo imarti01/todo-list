@@ -1,7 +1,6 @@
 import { TiArrowBackOutline } from "react-icons/ti";
 import { BsSendCheck } from "react-icons/bs";
-import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState } from "react";
 import { useAuthContext } from "../../../hooks";
 
 export const ModalAddTodo = ({ setIsOpenModalAdd }) => {
@@ -9,13 +8,8 @@ export const ModalAddTodo = ({ setIsOpenModalAdd }) => {
 
   const [newTodo, setNewTodo] = useState({
     text: "",
-    id: "",
     isChecked: false,
   });
-
-  useEffect(() => {
-    setNewTodo({ ...newTodo, id: uuidv4() });
-  }, []);
 
   const closeModalAdd = () => {
     setIsOpenModalAdd(false);
