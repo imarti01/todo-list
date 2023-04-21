@@ -13,6 +13,16 @@ export const authReducer = (state, action) => {
         ...state,
         todos: [...state.todos, action.payload],
       };
+    case types.EDIT_TODO:
+      return {
+        ...state,
+        todos: action.payload,
+      };
+    case types.DELETE_TODO:
+      return {
+        ...state,
+        todos: action.payload,
+      };
     default:
       return state;
   }

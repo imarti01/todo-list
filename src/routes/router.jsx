@@ -1,28 +1,41 @@
+import { Suspense, lazy } from "react";
 import { createBrowserRouter } from "react-router-dom";
-import { AuthLayout } from "../views/layouts/AuthLayout";
-import { LoginPage, MainPage, ProfilePage, RegisterPage } from "../views/pages";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PublicRoute } from "./PublicRoute";
+
+const AuthLayout = lazy(() => import("../views/layouts/AuthLayout"));
+const RegisterPage = lazy(() => import("../views/pages/auth/RegisterPage"));
+const LoginPage = lazy(() => import("../views/pages/auth/LoginPage"));
+const MainPage = lazy(() => import("../views/pages/MainPage"));
+const ProfilePage = lazy(() => import("../views/pages/ProfilePage"));
 
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: <AuthLayout />,
+    element: (
+      <Suspense fallback={<></>}>
+        <AuthLayout />
+      </Suspense>
+    ),
     children: [
       {
         path: "/",
         element: (
-          <PublicRoute>
-            <LoginPage />
-          </PublicRoute>
+          <Suspense fallback={<></>}>
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          </Suspense>
         ),
       },
       {
         path: "/register",
         element: (
-          <PublicRoute>
-            <RegisterPage />
-          </PublicRoute>
+          <Suspense fallback={<></>}>
+            <PublicRoute>
+              <RegisterPage />
+            </PublicRoute>
+          </Suspense>
         ),
       },
     ],
@@ -30,17 +43,21 @@ export const router = createBrowserRouter([
   {
     path: "/main",
     element: (
-      <ProtectedRoute>
-        <MainPage />
-      </ProtectedRoute>
+      <Suspense fallback={<></>}>
+        <ProtectedRoute>
+          <MainPage />
+        </ProtectedRoute>
+      </Suspense>
     ),
   },
   {
     path: "/profile",
     element: (
-      <ProtectedRoute>
-        <ProfilePage />
-      </ProtectedRoute>
+      <Suspense fallback={<></>}>
+        <ProtectedRoute>
+          <ProfilePage />
+        </ProtectedRoute>
+      </Suspense>
     ),
   },
 ]);

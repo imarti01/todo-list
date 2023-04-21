@@ -43,8 +43,8 @@ export const TodoItem = ({ todo }) => {
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
+        deleteTodo(todo._id);
         Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        deleteTodo(todo);
       }
     });
   };
@@ -59,7 +59,9 @@ export const TodoItem = ({ todo }) => {
       <input
         type="text"
         value={currentTodo.text}
-        className={currentTodo.isChecked ? "line-through" : ""}
+        className={
+          "bg-white ml-1 " + (currentTodo.isChecked ? "line-through" : "")
+        }
         ref={inputToEdit}
         disabled={!isEditing}
         onChange={handleEditTodo}

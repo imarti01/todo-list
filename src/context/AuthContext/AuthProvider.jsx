@@ -3,6 +3,14 @@ import { authReducer } from "./authReducer";
 import { types } from "../types/types";
 import { AuthContext } from "./AuthContext";
 import axios from "axios";
+import {
+  loginFetch,
+  authFirebaseFetch,
+  registerFetch,
+  addTodoFetch,
+  editTodoFetch,
+  deleteTodoFetch,
+} from "../../api/utils";
 
 const initialState = {
   user: null,
@@ -13,10 +21,7 @@ export const AuthProvider = ({ children }) => {
   const [authState, dispatch] = useReducer(authReducer, initialState);
 
   const register = async (newUser) => {
-    const res = await axios.post(
-      "http://localhost:4000/users/register",
-      newUser
-    );
+    const res = await registerFetch(newUser);
     if (res.data.ok) {
       dispatch({
         type: types.AUTH,
@@ -26,8 +31,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const login = async (user) => {
-    const res = await axios.post("http://localhost:4000/users/login", user);
-
+    const res = await loginFetch(user);
     if (res.data.ok) {
       dispatch({
         type: types.AUTH,
@@ -37,11 +41,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const authFirebase = async (user) => {
-    const res = await axios.post(
-      "http://localhost:4000/users/authFirebase",
-      user
-    );
-
+    const res = await authFirebaseFetch(user);
     if (res.data.ok) {
       dispatch({
         type: types.AUTH,
@@ -51,10 +51,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const addTodo = async (newTodo) => {
-    const res = await axios.post("http://localhost:4000/todos/add", {
-      todo: newTodo,
-      userId: authState.user.userId,
-    });
+    const res = await addTodoFetch(newTodo, authState.user.userId);
     if (res.data.ok) {
       dispatch({
         type: types.ADD_TODO,
@@ -63,9 +60,29 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const editTodo = () => {};
+  const editTodo = async (editedTodo) => {
+    const res = await editTodoFetch(editedTodo);
+    if (res.data.ok) {
+      const newArrTodos = authState.todos.map((todo) =>
+        todo._id === editedTodo._id ? editedTodo : todo
+      );
+      dispatch({
+        type: types.EDIT_TODO,
+        payload: newArrTodos,
+      });
+    }
+  };
 
-  const deleteTodo = () => {};
+  const deleteTodo = async (todoId) => {
+    const res = await deleteTodoFetch(todoId, authState.user.userId);
+    if (res.data.ok) {
+      const newArrTodos = authState.todos.filter((todo) => todo._id !== todoId);
+      dispatch({
+        type: types.DELETE_TODO,
+        payload: newArrTodos,
+      });
+    }
+  };
 
   return (
     <AuthContext.Provider

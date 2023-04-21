@@ -1,7 +1,7 @@
 import { Header } from "../components/mainPage/Header";
 import { TodoListContainer } from "../components/mainPage/TodoListContainer";
 
-export const MainPage = () => {
+const MainPage = () => {
   return (
     <div>
       <Header />
@@ -9,3 +9,5 @@ export const MainPage = () => {
     </div>
   );
 };
+
+export default MainPage;
