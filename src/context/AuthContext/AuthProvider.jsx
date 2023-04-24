@@ -10,7 +10,10 @@ import {
   addTodoFetch,
   editTodoFetch,
   deleteTodoFetch,
+  editUsernameFetch,
+  editImgFetch,
 } from "../../api/utils";
+import Swal from "sweetalert2";
 
 const initialState = {
   user: null,
@@ -22,32 +25,60 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (newUser) => {
     const res = await registerFetch(newUser);
-    if (res.data.ok) {
+    if (res.data?.ok) {
       dispatch({
         type: types.AUTH,
         payload: { user: res.data.user, todos: res.data.todos },
+      });
+    } else {
+      Swal.fire({
+        title: `${res}`,
+        icon: "warning",
+        iconColor: "#BB84E8",
+        color: "#373a40",
+        confirmButtonColor: "#BB84E8",
       });
     }
   };
 
   const login = async (user) => {
     const res = await loginFetch(user);
-    if (res.data.ok) {
+    if (res.data?.ok) {
       dispatch({
         type: types.AUTH,
         payload: { user: res.data.user, todos: res.data.todos },
+      });
+    } else {
+      Swal.fire({
+        title: `${res}`,
+        icon: "warning",
+        iconColor: "#BB84E8",
+        color: "#373a40",
+        confirmButtonColor: "#BB84E8",
       });
     }
   };
 
   const authFirebase = async (user) => {
     const res = await authFirebaseFetch(user);
-    if (res.data.ok) {
+    if (res.data?.ok) {
       dispatch({
         type: types.AUTH,
         payload: { user: res.data.user, todos: res.data.todos },
       });
+    } else {
+      Swal.fire({
+        title: `${res}`,
+        icon: "warning",
+        iconColor: "#BB84E8",
+        color: "#373a40",
+        confirmButtonColor: "#BB84E8",
+      });
     }
+  };
+
+  const logout = () => {
+    dispatch({ type: types.LOGOUT, payload: initialState });
   };
 
   const addTodo = async (newTodo) => {
@@ -84,6 +115,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const editUsername = async (username) => {
+    const res = await editUsernameFetch({
+      username,
+      userId: authState.user.userId,
+    });
+    if (res.data.ok) {
+      dispatch({ type: types.EDIT_USERNAME, payload: username });
+    }
+  };
+
+  const editImage = async (img) => {
+    const res = await editImgFetch(img);
+    if (res.data.ok) {
+      dispatch({ type: types.EDIT_IMG, payload: res.data.img });
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -91,9 +139,12 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         authFirebase,
+        logout,
         addTodo,
         editTodo,
         deleteTodo,
+        editUsername,
+        editImage,
       }}
     >
       {children}

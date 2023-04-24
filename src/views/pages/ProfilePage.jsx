@@ -1,5 +1,12 @@
+import { HeaderProfile, MainContainerProfile } from "../components/profilePage";
+
 const ProfilePage = () => {
-  return <div>ProfilePage</div>;
+  return (
+    <>
+      <HeaderProfile />
+      <MainContainerProfile />
+    </>
+  );
 };
 
 export default ProfilePage;

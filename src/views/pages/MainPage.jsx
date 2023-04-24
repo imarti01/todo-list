@@ -3,7 +3,7 @@ import { TodoListContainer } from "../components/mainPage/TodoListContainer";
 
 const MainPage = () => {
   return (
-    <div>
+    <div className="lg:flex flex-col items-center">
       <Header />
       <TodoListContainer />
     </div>

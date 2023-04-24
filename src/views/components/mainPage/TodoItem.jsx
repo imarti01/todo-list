@@ -1,26 +1,18 @@
 import { useRef, useState } from "react";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import Swal from "sweetalert2";
-import { useAuthContext } from "../../../hooks";
+import { useAuthContext, useIsEditing } from "../../../hooks";
 
 export const TodoItem = ({ todo }) => {
   const { editTodo, deleteTodo } = useAuthContext();
+  const inputRef = useRef(null);
+  const { isEditing, startEdit, finishEdit } = useIsEditing(inputRef);
 
-  const [isEditing, setIsEditing] = useState(false);
   const [currentTodo, setCurrentTodo] = useState(todo);
-
-  const inputToEdit = useRef(null);
 
   const handleIsChecked = () => {
     editTodo({ ...currentTodo, isChecked: !currentTodo.isChecked });
     setCurrentTodo({ ...currentTodo, isChecked: !currentTodo.isChecked });
-  };
-
-  const handleIsEditing = () => {
-    setIsEditing(true);
-    setTimeout(() => {
-      inputToEdit.current.focus();
-    }, 1);
   };
 
   const handleEditTodo = (e) => {
@@ -28,7 +20,7 @@ export const TodoItem = ({ todo }) => {
   };
 
   const saveChangesEdit = () => {
-    setIsEditing(false);
+    finishEdit();
     editTodo(currentTodo);
   };
 
@@ -38,19 +30,28 @@ export const TodoItem = ({ todo }) => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
+      iconColor: "#BB84E8",
+      color: "#373a40",
+      confirmButtonColor: "#BB84E8",
+      cancelButtonColor: "#373a40",
       confirmButtonText: "Yes, delete it!",
     }).then((result) => {
       if (result.isConfirmed) {
         deleteTodo(todo._id);
-        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+        Swal.fire({
+          title: "Deleted!",
+          text: "Your file has been deleted.",
+          icon: "success",
+          iconColor: "#BB84E8",
+          color: "#373a40",
+          confirmButtonColor: "#BB84E8",
+        });
       }
     });
   };
 
   return (
-    <li className="flex">
+    <li className="flex items-center justify-between w-full py-2 border-b lg:border-purple-300">
       <input
         type="checkbox"
         checked={currentTodo.isChecked}
@@ -60,16 +61,23 @@ export const TodoItem = ({ todo }) => {
         type="text"
         value={currentTodo.text}
         className={
-          "bg-white ml-1 " + (currentTodo.isChecked ? "line-through" : "")
+          "bg-transparent ml-1 text-sm w-10/12 lg:text-base xl:text-lg " +
+          (currentTodo.isChecked ? "line-through" : "")
         }
-        ref={inputToEdit}
+        ref={inputRef}
         disabled={!isEditing}
         onChange={handleEditTodo}
         onBlur={saveChangesEdit}
         onKeyDown={(e) => e.key === "Enter" && saveChangesEdit()}
       />
-      <FiEdit2 onClick={handleIsEditing} />
-      <FiTrash2 onClick={handleDeleteTodo} />
+      <FiEdit2
+        onClick={startEdit}
+        className="text-icon cursor-pointer lg:text-text"
+      />
+      <FiTrash2
+        onClick={handleDeleteTodo}
+        className="text-name cursor-pointer ml-1"
+      />
     </li>
   );
 };
