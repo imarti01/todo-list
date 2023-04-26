@@ -39,7 +39,6 @@ export const editImgFetch = async (data) => {
 //TODOS
 
 export const addTodoFetch = async (todo, userId) => {
-  console.log({ todo, userId });
   return await axios.post(`${API_URL}/todos/add`, {
     todo,
     userId,
@@ -47,7 +46,7 @@ export const addTodoFetch = async (todo, userId) => {
 };
 
 export const editTodoFetch = async (todo) => {
-  return await axios.post("http://localhost:4000/todos/edit", todo);
+  return await axios.post(`${API_URL}/todos/edit`, todo);
 };
 
 export const deleteTodoFetch = async (todoId, userId) => {
